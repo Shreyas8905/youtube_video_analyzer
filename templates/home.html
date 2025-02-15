@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter YouTube Link</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input, button { padding: 10px; margin: 10px; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Enter YouTube Video Link</h1>
+    <form method="POST">
+        <input type="text" name="youtube_url" placeholder="Paste YouTube link here" required>
+        <button type="submit">Submit</button>
+    </form>
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+</body>
+</html>

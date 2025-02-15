@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Video</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        button { padding: 10px 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Confirm Video</h1>
+    <p>Is this your video?</p>
+    <h2>{{ video_title }}</h2>
+    <form action="{{ url_for('confirm') }}" method="POST">
+        <button type="submit">Yes, Proceed to Chat</button>
+    </form>
+</body>
+</html>

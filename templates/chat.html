@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat About Video</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        #chatbox { width: 60%; margin: auto; border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
+        input, button { padding: 10px; margin: 10px; }
+    </style>
+    <script>
+        function sendMessage() {
+            let userMessage = document.getElementById("message").value;
+            let chatbox = document.getElementById("chatbox");
+            
+            if (userMessage.trim() === "") return;
+
+            chatbox.innerHTML += "<p><strong>You:</strong> " + userMessage + "</p>";
+            document.getElementById("message").value = "";
+
+            fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "message=" + encodeURIComponent(userMessage)
+            })
+            .then(response => response.text())
+            .then(data => {
+                chatbox.innerHTML += "<p><strong>Bot:</strong> " + data + "</p>";
+                chatbox.scrollTop = chatbox.scrollHeight;
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Chat About Video: <br><strong>{{ video_title }}</strong></h1>
+    <div id="chatbox"></div>
+    <input type="text" id="message" placeholder="Ask something about the video..." required>
+    <button onclick="sendMessage()">Send</button>
+</body>
+</html>
