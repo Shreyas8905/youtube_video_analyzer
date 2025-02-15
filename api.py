@@ -6,7 +6,6 @@ import requests
 
 app = Flask(__name__)
 
-# Groq API Configuration
 GROQ_API_KEY = "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"
 GROQ_API_URL = "https://api.groq.com/v1/chat/completions"
 
@@ -15,13 +14,12 @@ HEADERS = {
     "Content-Type": "application/json"
 }
 
-# Function to get YouTube title and transcript
 def get_youtube_data(url):
     ydl_opts = {
         "quiet": True,
         "noplaylist": True,
-        "writeautomaticsub": True,  # Ensure subtitles are fetched
-        "subtitleslangs": ["en"],  # Fetch English subtitles
+        "writeautomaticsub": True, 
+        "subtitleslangs": ["en"],  
     }
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -52,7 +50,7 @@ def get_bot_response(question, title, transcript):
     AI:"""
 
     data = {
-        "model": "llama3-8b-8192",  # Update model if needed
+        "model": "llama3-8b-8192", 
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7
     }
@@ -65,7 +63,6 @@ def get_bot_response(question, title, transcript):
     
     return "Sorry, I couldn't generate a response."
 
-# API Route
 @app.route("/ask", methods=["POST"])
 def ask():
     data = request.get_json()
@@ -83,6 +80,5 @@ def ask():
     response = get_bot_response(question, title, transcript)
     return jsonify({"title": title, "answer": response})
 
-# Run API
 if __name__ == "__main__":
     app.run(debug=True)

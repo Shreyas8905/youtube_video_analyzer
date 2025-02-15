@@ -9,11 +9,9 @@ from youtube_transcript_api import YouTubeTranscriptApi
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 
-# Groq API Configuration
 GROQ_API_KEY = "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"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
-# Database setup
 def init_db():
     conn = sqlite3.connect("chat.db")
     c = conn.cursor()
@@ -25,10 +23,8 @@ def init_db():
 init_db()
 
 def get_youtube_info(url):
-    """Fetch video title and transcript from YouTube."""
-    video_id = url.split("v=")[-1].split("&")[0]  # Extract video ID from URL
-    
-    # ✅ Get video title
+    video_id = url.split("v=")[-1].split("&")[0]  
+
     ydl_opts = {"quiet": True, "noplaylist": True}
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:
@@ -38,7 +34,6 @@ def get_youtube_info(url):
             print(f"Error fetching title: {e}")
             return None, None
 
-    # ✅ Get video transcript
     try:
         transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
         transcript_text = " ".join([entry["text"] for entry in transcript_list])
@@ -91,8 +86,8 @@ def home():
         
         title, transcript = get_youtube_info(url)
         if title and transcript:
-            session["video_title"] = title  # Store only title for confirmation
-            session["transcript"] = transcript  # Store transcript for later use in chat
+            session["video_title"] = title  
+            session["transcript"] = transcript  
             return redirect(url_for("confirm"))
 
         return render_template("home.html", error="Could not fetch video title or transcript")
@@ -104,12 +99,12 @@ def confirm():
     if "video_title" not in session:  
         return redirect(url_for("home"))  
 
-    title = session["video_title"]  # Only display the title, not the transcript
+    title = session["video_title"]  
 
     if request.method == "POST":  
         return redirect(url_for("chat"))  
 
-    return render_template("confirm.html", video_title=title)  # Pass only title
+    return render_template("confirm.html", video_title=title)  
 
 
 @app.route("/chat", methods=["GET", "POST"])
@@ -136,4 +131,4 @@ def chat():
     return render_template("chat.html", video_title=video_title)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
